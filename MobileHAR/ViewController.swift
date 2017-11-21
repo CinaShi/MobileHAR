@@ -20,10 +20,23 @@ class ViewController: UIViewController {
     @IBOutlet weak var startBtn: UIButton!
     @IBOutlet weak var stopBtn: UIButton!
     
+    //UI for testing data
+    
+    @IBOutlet weak var rawAccuracy: UILabel!
+    @IBOutlet var rawMeans: [UILabel]!
+    
+    @IBOutlet weak var filteredAccuracy: UILabel!
+    @IBOutlet var filteredMeans: [UILabel]!
+
+    @IBOutlet weak var sampleSize: UILabel!
+    
     let model = ConvLSTM()
     var rawSensorDataArray = MultiArray<Double>(shape: [1,128,6])
     var filteredSensorDataArray = MultiArray<Double>(shape: [1,128,6])
     
+    var existedArray = [String]()
+    var lastMeans = [Double]()
+    var positionChangeCount = 0
     
     var gyroXData = [Double]()
     var gyroYData = [Double]()
@@ -33,6 +46,32 @@ class ViewController: UIViewController {
     var accZData = [Double]()
     
     var motion = CMMotionManager()
+    
+    
+    //Vars for testing
+    let destinatedLabel = "WALKING_UPSTAIRS"
+    
+    var sampleCount = 0
+    
+    var allRawGyroXData = [Double]()
+    var allRawGyroYData = [Double]()
+    var allRawGyroZData = [Double]()
+    var allRawAccXData = [Double]()
+    var allRawAccYData = [Double]()
+    var allRawAccZData = [Double]()
+    
+    var rawCorrectPredCount = 0.0
+    var rawAllPredCount = 0.0
+    
+    var allFilteredGyroXData = [Double]()
+    var allFilteredGyroYData = [Double]()
+    var allFilteredGyroZData = [Double]()
+    var allFilteredAccXData = [Double]()
+    var allFilteredAccYData = [Double]()
+    var allFilteredAccZData = [Double]()
+    
+    var filteredCorrectPredCount = 0.0
+    var filteredAllPredCount = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,18 +91,99 @@ class ViewController: UIViewController {
         motion.startDeviceMotionUpdates(to: OperationQueue.current!, withHandler: {(data,error) in
             if let trueData = data {
                 if counter == 128 {
+                    //raw data output
                     let input = ConvLSTMInput(input: self.rawSensorDataArray.array)
+
                     let output = try? self.model.prediction(input: input)
-                    self.recogLabel.text =  "You are \(output?.classLabel ?? "doing nothing"). "
+
+//                    print(input.input.shape)
+
+//                    if output == nil {
+//                        fatalError("unexpected runtime error")
+//                    }
                     
-                    //filter data
+                    //do position change detection first
                     
-                    self.gyroXData = self.butter_lowpass_filter(data: self.median_filter(data: self.gyroXData, window_size: 3), cutoff: 20, fs: 50, order: 3)
-                    self.gyroYData = self.butter_lowpass_filter(data: self.median_filter(data: self.gyroYData, window_size: 3), cutoff: 20, fs: 50, order: 3)
-                    self.gyroZData = self.butter_lowpass_filter(data: self.median_filter(data: self.gyroZData, window_size: 3), cutoff: 20, fs: 50, order: 3)
-                    self.accXData = self.butter_lowpass_filter(data: self.median_filter(data: self.accXData, window_size: 3), cutoff: 20, fs: 50, order: 3)
-                    self.accYData = self.butter_lowpass_filter(data: self.median_filter(data: self.accYData, window_size: 3), cutoff: 20, fs: 50, order: 3)
-                    self.accZData = self.butter_lowpass_filter(data: self.median_filter(data: self.accZData, window_size: 3), cutoff: 20, fs: 50, order: 3)
+                    if self.lastMeans.count == 0 {
+                        self.lastMeans.append((self.allRawAccXData.reduce(0, +)/Double(self.allRawAccXData.count)))
+                        self.lastMeans.append((self.allRawAccYData.reduce(0, +)/Double(self.allRawAccYData.count)))
+                        self.lastMeans.append((self.allRawAccZData.reduce(0, +)/Double(self.allRawAccZData.count)))
+                        self.lastMeans.append((self.allRawGyroXData.reduce(0, +)/Double(self.allRawGyroXData.count)))
+                        self.lastMeans.append((self.allRawGyroYData.reduce(0, +)/Double(self.allRawGyroYData.count)))
+                        self.lastMeans.append((self.allRawGyroZData.reduce(0, +)/Double(self.allRawGyroZData.count)))
+                    } else {
+                        var currentMeans = [Double]()
+                        currentMeans.append((self.allRawAccXData.reduce(0, +)/Double(self.allRawAccXData.count)))
+                        currentMeans.append((self.allRawAccYData.reduce(0, +)/Double(self.allRawAccYData.count)))
+                        currentMeans.append((self.allRawAccZData.reduce(0, +)/Double(self.allRawAccZData.count)))
+                        currentMeans.append((self.allRawGyroXData.reduce(0, +)/Double(self.allRawGyroXData.count)))
+                        currentMeans.append((self.allRawGyroYData.reduce(0, +)/Double(self.allRawGyroYData.count)))
+                        currentMeans.append((self.allRawGyroZData.reduce(0, +)/Double(self.allRawGyroZData.count)))
+                        
+                        var positionChanged = false
+                        let changeFactor = 25.0
+                        
+                        for i in 0...5 {
+                            let meanDiff = abs(self.lastMeans[i] - currentMeans[i])
+                            if meanDiff > abs(self.lastMeans[i]) * changeFactor || meanDiff > abs(currentMeans[i]) * changeFactor {
+                                positionChanged = true
+                            }
+                        }
+                        
+                        if positionChanged {
+                            self.existedArray.removeAll()
+                            self.positionChangeCount += 1
+                        }
+                        
+                        self.lastMeans = currentMeans
+                    }
+                    
+                    
+                    // use new algo to improve prediction
+                    self.existedArray.append((output?.classLabel)!)
+                    var outputLabel = output?.classLabel
+                    
+                    let unique = Array(Set(self.existedArray))
+                    for label in unique {
+                        if Double(self.existedArray.filter{$0 == label}.count) / Double(self.existedArray.count) > 0.6 {
+                            outputLabel = label
+                            break
+                        }
+                    }
+
+                    self.recogLabel.text =  "You are \(outputLabel ?? "doing nothing"). "
+                    
+                    //testing
+                    
+                    if outputLabel == self.destinatedLabel {
+                        self.rawCorrectPredCount += 1
+                    }
+                    self.rawAllPredCount += 1
+                    self.rawAccuracy.text = "\(self.rawCorrectPredCount/self.rawAllPredCount)"
+
+                    self.rawMeans[0].text = "\(self.allRawAccXData.reduce(0, +)/Double(self.allRawAccXData.count))"
+                    self.rawMeans[1].text = "\(self.allRawAccYData.reduce(0, +)/Double(self.allRawAccYData.count))"
+                    self.rawMeans[2].text = "\(self.allRawAccZData.reduce(0, +)/Double(self.allRawAccZData.count))"
+                    self.rawMeans[3].text = "\(self.allRawGyroXData.reduce(0, +)/Double(self.allRawGyroXData.count))"
+                    self.rawMeans[4].text = "\(self.allRawGyroYData.reduce(0, +)/Double(self.allRawGyroYData.count))"
+                    self.rawMeans[5].text = "\(self.allRawGyroZData.reduce(0, +)/Double(self.allRawGyroZData.count))"
+                    
+                    //filter data output
+                    
+//                    self.gyroXData = self.butter_lowpass_filter(data: self.median_filter(data: self.gyroXData, window_size: 3), cutoff: 20, fs: 50, order: 3)
+//                    self.gyroYData = self.butter_lowpass_filter(data: self.median_filter(data: self.gyroYData, window_size: 3), cutoff: 20, fs: 50, order: 3)
+//                    self.gyroZData = self.butter_lowpass_filter(data: self.median_filter(data: self.gyroZData, window_size: 3), cutoff: 20, fs: 50, order: 3)
+//                    self.accXData = self.butter_lowpass_filter(data: self.median_filter(data: self.accXData, window_size: 3), cutoff: 20, fs: 50, order: 3)
+//                    self.accYData = self.butter_lowpass_filter(data: self.median_filter(data: self.accYData, window_size: 3), cutoff: 20, fs: 50, order: 3)
+//                    self.accZData = self.butter_lowpass_filter(data: self.median_filter(data: self.accZData, window_size: 3), cutoff: 20, fs: 50, order: 3)
+                    
+                    //use only median filter
+                    self.gyroXData = self.median_filter(data: self.gyroXData, window_size: 3)
+                    self.gyroYData = self.median_filter(data: self.gyroYData, window_size: 3)
+                    self.gyroZData = self.median_filter(data: self.gyroZData, window_size: 3)
+                    self.accXData = self.median_filter(data: self.accXData, window_size: 3)
+                    self.accYData = self.median_filter(data: self.accYData, window_size: 3)
+                    self.accZData = self.median_filter(data: self.accZData, window_size: 3)
                     
                     for i in 0...127 {
                         self.filteredSensorDataArray[0,i,0] = self.gyroXData[i]
@@ -72,10 +192,26 @@ class ViewController: UIViewController {
                         self.filteredSensorDataArray[0,i,3] = self.gyroXData[i]
                         self.filteredSensorDataArray[0,i,4] = self.accYData[i]
                         self.filteredSensorDataArray[0,i,5] = self.accZData[i]
+                        
+                        //testing
+                        self.allFilteredGyroXData.append(self.gyroXData[i])
+                        self.allFilteredGyroYData.append(self.gyroYData[i])
+                        self.allFilteredGyroZData.append(self.gyroZData[i])
+                        self.allFilteredAccXData.append(self.accXData[i])
+                        self.allFilteredAccYData.append(self.accYData[i])
+                        self.allFilteredAccZData.append(self.accZData[i])
                     }
                     
                     let filteredInput = ConvLSTMInput(input: self.filteredSensorDataArray.array)
+                    
                     let filteredOutput = try? self.model.prediction(input: filteredInput)
+                    
+//                    print(filteredInput.input.shape)
+//
+//                    if filteredOutput == nil {
+//                        fatalError("unexpected runtime error")
+//                    }
+                    
                     self.filteredRecogLabel.text =  "You are \(filteredOutput?.classLabel ?? "doing nothing"). "
                     
                     self.gyroXData.removeAll()
@@ -86,7 +222,28 @@ class ViewController: UIViewController {
                     self.accZData.removeAll()
                     
                     counter = 0
+                    
+                    //testing
+                    
+                    if filteredOutput?.classLabel == self.destinatedLabel {
+                        self.filteredCorrectPredCount += 1
+                    }
+                    self.filteredAllPredCount += 1
+                    self.filteredAccuracy.text = "\(self.filteredCorrectPredCount/self.filteredAllPredCount)"
+                    
+                    self.filteredMeans[0].text = "\(self.allFilteredAccXData.reduce(0, +)/Double(self.allFilteredAccXData.count))"
+                    self.filteredMeans[1].text = "\(self.allFilteredAccYData.reduce(0, +)/Double(self.allFilteredAccYData.count))"
+                    self.filteredMeans[2].text = "\(self.allFilteredAccZData.reduce(0, +)/Double(self.allFilteredAccZData.count))"
+                    self.filteredMeans[3].text = "\(self.allFilteredGyroXData.reduce(0, +)/Double(self.allFilteredGyroXData.count))"
+                    self.filteredMeans[4].text = "\(self.allFilteredGyroYData.reduce(0, +)/Double(self.allFilteredGyroYData.count))"
+                    self.filteredMeans[5].text = "\(self.allFilteredGyroZData.reduce(0, +)/Double(self.allFilteredGyroZData.count))"
+                    
+                    
+                    self.sampleCount += 1
+                    self.sampleSize.text = "size: \(self.sampleCount), position changed: \(self.positionChangeCount)"
+                    
                 }
+                //raw data here
                 self.rawSensorDataArray[0,counter,0] = trueData.rotationRate.x
                 self.rawSensorDataArray[0,counter,1] = trueData.rotationRate.y
                 self.rawSensorDataArray[0,counter,2] = trueData.rotationRate.z
@@ -94,13 +251,22 @@ class ViewController: UIViewController {
                 self.rawSensorDataArray[0,counter,4] = trueData.userAcceleration.y+trueData.gravity.y
                 self.rawSensorDataArray[0,counter,5] = trueData.userAcceleration.z+trueData.gravity.z
                 
-                // filter ones here
+                // filter data here
                 self.gyroXData.append(trueData.rotationRate.x)
                 self.gyroYData.append(trueData.rotationRate.y)
                 self.gyroZData.append(trueData.rotationRate.z)
                 self.accXData.append(trueData.userAcceleration.x+trueData.gravity.x)
                 self.accYData.append(trueData.userAcceleration.y+trueData.gravity.y)
                 self.accZData.append(trueData.userAcceleration.z+trueData.gravity.z)
+                
+                // testing
+                self.allRawGyroXData.append(trueData.rotationRate.x)
+                self.allRawGyroYData.append(trueData.rotationRate.y)
+                self.allRawGyroZData.append(trueData.rotationRate.z)
+                self.allRawAccXData.append(trueData.userAcceleration.x+trueData.gravity.x)
+                self.allRawAccYData.append(trueData.userAcceleration.y+trueData.gravity.y)
+                self.allRawAccZData.append(trueData.userAcceleration.z+trueData.gravity.z)
+                
                 
                 counter = counter + 1
             }
