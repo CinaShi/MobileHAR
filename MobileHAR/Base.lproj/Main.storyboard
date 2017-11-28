@@ -168,6 +168,17 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MlZ-wz-G82">
+                                <rect key="frame" x="347" y="685" width="49" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </switch>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="in hand" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aEO-98-Vi3">
+                                <rect key="frame" x="221" y="690" width="118" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -175,6 +186,7 @@
                     <connections>
                         <outlet property="filteredAccuracy" destination="WUc-cZ-U4q" id="lU2-oc-Vmq"/>
                         <outlet property="filteredRecogLabel" destination="KYb-du-hE0" id="xcq-Xw-M9y"/>
+                        <outlet property="inHandSwitch" destination="MlZ-wz-G82" id="LIQ-TU-H5K"/>
                         <outlet property="rawAccuracy" destination="RC9-37-dww" id="ywj-03-hc4"/>
                         <outlet property="recogLabel" destination="tB9-7l-s3e" id="Cgl-xs-Q1K"/>
                         <outlet property="sampleSize" destination="3ur-ro-LzF" id="I3e-3A-hKL"/>

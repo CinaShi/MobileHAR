@@ -20,6 +20,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var startBtn: UIButton!
     @IBOutlet weak var stopBtn: UIButton!
     
+    @IBOutlet weak var inHandSwitch: UISwitch!
     //UI for testing data
     
     @IBOutlet weak var rawAccuracy: UILabel!
@@ -79,7 +80,6 @@ class ViewController: UIViewController {
         startBtn.isEnabled = true
         stopBtn.isEnabled = false
     }
-
     
     @IBAction func startRecording(_ sender: Any) {
         startBtn.isEnabled = false
@@ -243,29 +243,59 @@ class ViewController: UIViewController {
                     self.sampleSize.text = "size: \(self.sampleCount), position changed: \(self.positionChangeCount)"
                     
                 }
-                //raw data here
-                self.rawSensorDataArray[0,counter,0] = trueData.rotationRate.x
-                self.rawSensorDataArray[0,counter,1] = trueData.rotationRate.y
-                self.rawSensorDataArray[0,counter,2] = trueData.rotationRate.z
-                self.rawSensorDataArray[0,counter,3] = trueData.userAcceleration.x+trueData.gravity.x
-                self.rawSensorDataArray[0,counter,4] = trueData.userAcceleration.y+trueData.gravity.y
-                self.rawSensorDataArray[0,counter,5] = trueData.userAcceleration.z+trueData.gravity.z
                 
-                // filter data here
-                self.gyroXData.append(trueData.rotationRate.x)
-                self.gyroYData.append(trueData.rotationRate.y)
-                self.gyroZData.append(trueData.rotationRate.z)
-                self.accXData.append(trueData.userAcceleration.x+trueData.gravity.x)
-                self.accYData.append(trueData.userAcceleration.y+trueData.gravity.y)
-                self.accZData.append(trueData.userAcceleration.z+trueData.gravity.z)
+                if self.inHandSwitch.isOn {
+                    //raw data here
+                    self.rawSensorDataArray[0,counter,0] = -trueData.rotationRate.y
+                    self.rawSensorDataArray[0,counter,1] = trueData.rotationRate.x
+                    self.rawSensorDataArray[0,counter,2] = trueData.rotationRate.z
+                    self.rawSensorDataArray[0,counter,3] = -trueData.userAcceleration.y-trueData.gravity.y
+                    self.rawSensorDataArray[0,counter,4] = trueData.userAcceleration.x+trueData.gravity.x
+                    self.rawSensorDataArray[0,counter,5] = trueData.userAcceleration.z+trueData.gravity.z
+                    
+                    // filter data here
+                    self.gyroXData.append(-trueData.rotationRate.y)
+                    self.gyroYData.append(trueData.rotationRate.x)
+                    self.gyroZData.append(trueData.rotationRate.z)
+                    self.accXData.append(-trueData.userAcceleration.y-trueData.gravity.y)
+                    self.accYData.append(trueData.userAcceleration.x+trueData.gravity.x)
+                    self.accZData.append(trueData.userAcceleration.z+trueData.gravity.z)
+                    
+                    // testing
+                    self.allRawGyroXData.append(-trueData.rotationRate.y)
+                    self.allRawGyroYData.append(trueData.rotationRate.x)
+                    self.allRawGyroZData.append(trueData.rotationRate.z)
+                    self.allRawAccXData.append(-trueData.userAcceleration.y-trueData.gravity.y)
+                    self.allRawAccYData.append(trueData.userAcceleration.x+trueData.gravity.x)
+                    self.allRawAccZData.append(trueData.userAcceleration.z+trueData.gravity.z)
+                    
+                } else {
+                    //raw data here
+                    self.rawSensorDataArray[0,counter,0] = trueData.rotationRate.x
+                    self.rawSensorDataArray[0,counter,1] = trueData.rotationRate.y
+                    self.rawSensorDataArray[0,counter,2] = trueData.rotationRate.z
+                    self.rawSensorDataArray[0,counter,3] = trueData.userAcceleration.x+trueData.gravity.x
+                    self.rawSensorDataArray[0,counter,4] = trueData.userAcceleration.y+trueData.gravity.y
+                    self.rawSensorDataArray[0,counter,5] = trueData.userAcceleration.z+trueData.gravity.z
+                    
+                    // filter data here
+                    self.gyroXData.append(trueData.rotationRate.x)
+                    self.gyroYData.append(trueData.rotationRate.y)
+                    self.gyroZData.append(trueData.rotationRate.z)
+                    self.accXData.append(trueData.userAcceleration.x+trueData.gravity.x)
+                    self.accYData.append(trueData.userAcceleration.y+trueData.gravity.y)
+                    self.accZData.append(trueData.userAcceleration.z+trueData.gravity.z)
+                    
+                    // testing
+                    self.allRawGyroXData.append(trueData.rotationRate.x)
+                    self.allRawGyroYData.append(trueData.rotationRate.y)
+                    self.allRawGyroZData.append(trueData.rotationRate.z)
+                    self.allRawAccXData.append(trueData.userAcceleration.x+trueData.gravity.x)
+                    self.allRawAccYData.append(trueData.userAcceleration.y+trueData.gravity.y)
+                    self.allRawAccZData.append(trueData.userAcceleration.z+trueData.gravity.z)
+                    
+                }
                 
-                // testing
-                self.allRawGyroXData.append(trueData.rotationRate.x)
-                self.allRawGyroYData.append(trueData.rotationRate.y)
-                self.allRawGyroZData.append(trueData.rotationRate.z)
-                self.allRawAccXData.append(trueData.userAcceleration.x+trueData.gravity.x)
-                self.allRawAccYData.append(trueData.userAcceleration.y+trueData.gravity.y)
-                self.allRawAccZData.append(trueData.userAcceleration.z+trueData.gravity.z)
                 
                 
                 counter = counter + 1
