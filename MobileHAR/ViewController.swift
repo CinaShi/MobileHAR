@@ -11,6 +11,7 @@ import CoreML
 import CoreMotion
 import Darwin
 import Accelerate
+import GLKit
 
 class ViewController: UIViewController {
 
@@ -48,9 +49,11 @@ class ViewController: UIViewController {
     
     var motion = CMMotionManager()
     
+    var lastVelocity = [Double]()
+    var lastAcc = [Double]()
     
     //Vars for testing
-    let destinatedLabel = "WALKING_UPSTAIRS"
+    let destinatedLabel = "WALKING"
     
     var sampleCount = 0
     
@@ -88,7 +91,7 @@ class ViewController: UIViewController {
         print("motion recording started")
         motion.deviceMotionUpdateInterval = 0.02
         var counter = 0
-        motion.startDeviceMotionUpdates(to: OperationQueue.current!, withHandler: {(data,error) in
+        motion.startDeviceMotionUpdates(using:.xMagneticNorthZVertical, to: OperationQueue.current!, withHandler: {(data,error) in
             if let trueData = data {
                 if counter == 128 {
                     //raw data output
@@ -143,13 +146,13 @@ class ViewController: UIViewController {
                     self.existedArray.append((output?.classLabel)!)
                     var outputLabel = output?.classLabel
                     
-                    let unique = Array(Set(self.existedArray))
-                    for label in unique {
-                        if Double(self.existedArray.filter{$0 == label}.count) / Double(self.existedArray.count) > 0.6 {
-                            outputLabel = label
-                            break
-                        }
-                    }
+//                    let unique = Array(Set(self.existedArray))
+//                    for label in unique {
+//                        if Double(self.existedArray.filter{$0 == label}.count) / Double(self.existedArray.count) > 0.5 {
+//                            outputLabel = label
+//                            break
+//                        }
+//                    }
 
                     self.recogLabel.text =  "You are \(outputLabel ?? "doing nothing"). "
                     
@@ -189,7 +192,7 @@ class ViewController: UIViewController {
                         self.filteredSensorDataArray[0,i,0] = self.gyroXData[i]
                         self.filteredSensorDataArray[0,i,1] = self.gyroYData[i]
                         self.filteredSensorDataArray[0,i,2] = self.gyroZData[i]
-                        self.filteredSensorDataArray[0,i,3] = self.gyroXData[i]
+                        self.filteredSensorDataArray[0,i,3] = self.accXData[i]
                         self.filteredSensorDataArray[0,i,4] = self.accYData[i]
                         self.filteredSensorDataArray[0,i,5] = self.accZData[i]
                         
@@ -245,31 +248,90 @@ class ViewController: UIViewController {
                 }
                 
                 if self.inHandSwitch.isOn {
+                    // test coordinate transformation here
+                    
+                    let rotationVector = trueData.attitude.quaternion
+                    
+                    print(rotationVector)
+                    
+                    var accData = [Double]()
+                    var gyroData = [Double]()
+                    accData.append(trueData.userAcceleration.x+trueData.gravity.x)
+                    accData.append(trueData.userAcceleration.y+trueData.gravity.y)
+                    accData.append(trueData.userAcceleration.z+trueData.gravity.z)
+                    gyroData.append(trueData.rotationRate.x)
+                    gyroData.append(trueData.rotationRate.y)
+                    gyroData.append(trueData.rotationRate.z)
+                    
+                    // test tranformation to world coordinate
+                    (accData, gyroData) = self.coordinate_transform_world(rotationVector: rotationVector, accData: accData, gyroData: gyroData)
+                    
+                    // test transformation to user-centric coordinate
+                    if counter == 0 {
+                        self.lastVelocity = [0, 0, 0]
+                        self.lastAcc = [0, 0, 0]
+                    }
+                    let currentVelocity = self.calculateVelocity(lastVelocity: self.lastVelocity, currentAcc: accData, lastAcc: self.lastAcc, deltaT: self.motion.deviceMotionUpdateInterval.magnitude)
+                    
+                    self.lastVelocity = currentVelocity
+                    self.lastAcc = accData
+                    
+                    (accData, gyroData) = self.coordinate_transform_user(currentVel: currentVelocity, accData: accData, gyroData: gyroData)
+                    
+                    // x = -z
+                    // z = x
+                    // y = z
+                    
                     //raw data here
-                    self.rawSensorDataArray[0,counter,0] = -trueData.rotationRate.y
-                    self.rawSensorDataArray[0,counter,1] = trueData.rotationRate.x
-                    self.rawSensorDataArray[0,counter,2] = trueData.rotationRate.z
-                    self.rawSensorDataArray[0,counter,3] = -trueData.userAcceleration.y-trueData.gravity.y
-                    self.rawSensorDataArray[0,counter,4] = trueData.userAcceleration.x+trueData.gravity.x
-                    self.rawSensorDataArray[0,counter,5] = trueData.userAcceleration.z+trueData.gravity.z
+                    self.rawSensorDataArray[0,counter,0] = -gyroData[0]
+                    self.rawSensorDataArray[0,counter,1] = -gyroData[1]
+                    self.rawSensorDataArray[0,counter,2] = -gyroData[2]
+                    self.rawSensorDataArray[0,counter,3] = -accData[0]
+                    self.rawSensorDataArray[0,counter,4] = -accData[1]
+                    self.rawSensorDataArray[0,counter,5] = -accData[2]
                     
                     // filter data here
-                    self.gyroXData.append(-trueData.rotationRate.y)
-                    self.gyroYData.append(trueData.rotationRate.x)
-                    self.gyroZData.append(trueData.rotationRate.z)
-                    self.accXData.append(-trueData.userAcceleration.y-trueData.gravity.y)
-                    self.accYData.append(trueData.userAcceleration.x+trueData.gravity.x)
-                    self.accZData.append(trueData.userAcceleration.z+trueData.gravity.z)
+                    self.gyroXData.append(-gyroData[0])
+                    self.gyroYData.append(-gyroData[1])
+                    self.gyroZData.append(-gyroData[2])
+                    self.accXData.append(-accData[0])
+                    self.accYData.append(-accData[1])
+                    self.accZData.append(-accData[2])
                     
                     // testing
-                    self.allRawGyroXData.append(-trueData.rotationRate.y)
-                    self.allRawGyroYData.append(trueData.rotationRate.x)
-                    self.allRawGyroZData.append(trueData.rotationRate.z)
-                    self.allRawAccXData.append(-trueData.userAcceleration.y-trueData.gravity.y)
-                    self.allRawAccYData.append(trueData.userAcceleration.x+trueData.gravity.x)
-                    self.allRawAccZData.append(trueData.userAcceleration.z+trueData.gravity.z)
+                    self.allRawGyroXData.append(-gyroData[0])
+                    self.allRawGyroYData.append(-gyroData[1])
+                    self.allRawGyroZData.append(-gyroData[2])
+                    self.allRawAccXData.append(-accData[0])
+                    self.allRawAccYData.append(-accData[1])
+                    self.allRawAccZData.append(-accData[2])
+                    
+//                    //raw data here
+//                    self.rawSensorDataArray[0,counter,0] = -trueData.rotationRate.y
+//                    self.rawSensorDataArray[0,counter,1] = trueData.rotationRate.x
+//                    self.rawSensorDataArray[0,counter,2] = trueData.rotationRate.z
+//                    self.rawSensorDataArray[0,counter,3] = -trueData.userAcceleration.y-trueData.gravity.y
+//                    self.rawSensorDataArray[0,counter,4] = trueData.userAcceleration.x+trueData.gravity.x
+//                    self.rawSensorDataArray[0,counter,5] = trueData.userAcceleration.z+trueData.gravity.z
+//
+//                    // filter data here
+//                    self.gyroXData.append(-trueData.rotationRate.y)
+//                    self.gyroYData.append(trueData.rotationRate.x)
+//                    self.gyroZData.append(trueData.rotationRate.z)
+//                    self.accXData.append(-trueData.userAcceleration.y-trueData.gravity.y)
+//                    self.accYData.append(trueData.userAcceleration.x+trueData.gravity.x)
+//                    self.accZData.append(trueData.userAcceleration.z+trueData.gravity.z)
+//
+//                    // testing
+//                    self.allRawGyroXData.append(-trueData.rotationRate.y)
+//                    self.allRawGyroYData.append(trueData.rotationRate.x)
+//                    self.allRawGyroZData.append(trueData.rotationRate.z)
+//                    self.allRawAccXData.append(-trueData.userAcceleration.y-trueData.gravity.y)
+//                    self.allRawAccYData.append(trueData.userAcceleration.x+trueData.gravity.x)
+//                    self.allRawAccZData.append(trueData.userAcceleration.z+trueData.gravity.z)
                     
                 } else {
+                    
                     //raw data here
                     self.rawSensorDataArray[0,counter,0] = trueData.rotationRate.x
                     self.rawSensorDataArray[0,counter,1] = trueData.rotationRate.y
@@ -277,7 +339,7 @@ class ViewController: UIViewController {
                     self.rawSensorDataArray[0,counter,3] = trueData.userAcceleration.x+trueData.gravity.x
                     self.rawSensorDataArray[0,counter,4] = trueData.userAcceleration.y+trueData.gravity.y
                     self.rawSensorDataArray[0,counter,5] = trueData.userAcceleration.z+trueData.gravity.z
-                    
+
                     // filter data here
                     self.gyroXData.append(trueData.rotationRate.x)
                     self.gyroYData.append(trueData.rotationRate.y)
@@ -285,7 +347,7 @@ class ViewController: UIViewController {
                     self.accXData.append(trueData.userAcceleration.x+trueData.gravity.x)
                     self.accYData.append(trueData.userAcceleration.y+trueData.gravity.y)
                     self.accZData.append(trueData.userAcceleration.z+trueData.gravity.z)
-                    
+
                     // testing
                     self.allRawGyroXData.append(trueData.rotationRate.x)
                     self.allRawGyroYData.append(trueData.rotationRate.y)
@@ -295,8 +357,6 @@ class ViewController: UIViewController {
                     self.allRawAccZData.append(trueData.userAcceleration.z+trueData.gravity.z)
                     
                 }
-                
-                
                 
                 counter = counter + 1
             }
@@ -313,6 +373,90 @@ class ViewController: UIViewController {
         print("motion recording stopped")
     }
     
+    // coordinate transformation
+    
+    func coordinate_transform_world(rotationVector: CMQuaternion, accData: [Double], gyroData: [Double]) -> ([Double], [Double]) {
+        let quaternion = GLKQuaternionMake(Float(rotationVector.y), Float(-rotationVector.x), Float(rotationVector.z), Float(rotationVector.w))
+        let conjQuaternion = GLKQuaternionConjugate(quaternion)
+        
+        let accVector = GLKQuaternionMake(Float(accData[0]), Float(accData[1]), Float(accData[2]), 0)
+        let gyroVector = GLKQuaternionMake(Float(gyroData[0]), Float(gyroData[1]), Float(gyroData[2]), 0)
+        
+        let accMulti1 = GLKQuaternionMultiply(quaternion, accVector)
+        let accMulti2 = GLKQuaternionMultiply(accMulti1, conjQuaternion)
+        
+        let gyroMulti1 = GLKQuaternionMultiply(quaternion, gyroVector)
+        let gyroMulti2 = GLKQuaternionMultiply(gyroMulti1, conjQuaternion)
+        
+        var accData = [Double]()
+        var gyroData = [Double]()
+        accData.append(Double(accMulti2.x))
+        accData.append(Double(accMulti2.y))
+        accData.append(Double(accMulti2.z))
+        gyroData.append(Double(gyroMulti2.x))
+        gyroData.append(Double(gyroMulti2.y))
+        gyroData.append(Double(gyroMulti2.z))
+        
+        return (accData, gyroData)
+    }
+    
+    func calculateVelocity(lastVelocity: [Double], currentAcc: [Double], lastAcc: [Double], deltaT: Double) -> [Double] {
+        let velX = lastVelocity[0] + deltaT / 2 * (currentAcc[0] - lastAcc[0]) + deltaT * lastAcc[0]
+        let velY = lastVelocity[1] + deltaT / 2 * (currentAcc[1] - lastAcc[1]) + deltaT * lastAcc[1]
+        let velZ = lastVelocity[2] + deltaT / 2 * (currentAcc[2] - lastAcc[2]) + deltaT * lastAcc[2]
+        
+        var newVelocity = [Double]()
+        newVelocity.append(velX)
+        newVelocity.append(velY)
+        newVelocity.append(velZ)
+        
+        return newVelocity
+    }
+    
+    func coordinate_transform_user(currentVel: [Double], accData: [Double], gyroData: [Double]) -> ([Double], [Double]) {
+        //calculate eX, eY and eZ to get tranformation matrix
+        let eX = normalize_vector(vector: currentVel)
+        
+        //cross product: (0, 0, 1) x eX
+        var eY = [Double]()
+        eY.append(-eX[1])
+        eY.append(eX[0])
+        eY.append(0)
+        eY = normalize_vector(vector: eY)
+        
+        //cros product: eX x eY
+        var eZ = [Double]()
+        eZ.append(eX[1] * eY[2] - eX[2] * eY[1])
+        eZ.append(eX[2] * eY[0] - eX[0] * eY[2])
+        eZ.append(eX[0] * eY[1] - eX[1] * eY[0])
+        
+        //now we have transformation matrix R = (eX, eY, eZ)
+        var accVector = [Double]()
+        var gyroVector = [Double]()
+        
+        accVector.append(eX[0] * accData[0] + eY[0] * accData[1] + eZ[0] * accData[2])
+        accVector.append(eX[1] * accData[0] + eY[1] * accData[1] + eZ[1] * accData[2])
+        accVector.append(eX[2] * accData[0] + eY[2] * accData[1] + eZ[2] * accData[2])
+        
+        gyroVector.append(eX[0] * gyroData[0] + eY[0] * gyroData[1] + eZ[0] * gyroData[2])
+        gyroVector.append(eX[1] * gyroData[0] + eY[1] * gyroData[1] + eZ[1] * gyroData[2])
+        gyroVector.append(eX[2] * gyroData[0] + eY[2] * gyroData[1] + eZ[2] * gyroData[2])
+        
+        return (accVector, gyroVector)
+    }
+    
+    func normalize_vector(vector: [Double]) -> [Double] {
+        var lengthSumSq: Double = 0
+        for unit in vector {
+            lengthSumSq += unit * unit
+        }
+        let vector_length = lengthSumSq.squareRoot()
+        var norm_vector = [Double]()
+        norm_vector.append((vector[0] / vector_length))
+        norm_vector.append((vector[1] / vector_length))
+        norm_vector.append((vector[2] / vector_length))
+        return norm_vector
+    }
     
     // Below are implementation of median filter
     

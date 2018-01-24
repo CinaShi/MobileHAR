@@ -26,6 +26,7 @@
 		08B99C7B1FAFB13300D601E6 /* NonMaxSuppression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B99C741FAFB13200D601E6 /* NonMaxSuppression.swift */; };
 		08B99C7D1FB164ED00D601E6 /* complex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B99C7C1FB164ED00D601E6 /* complex.swift */; };
 		08B99C7F1FB166AD00D601E6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08B99C7E1FB166A800D601E6 /* CoreGraphics.framework */; };
+		08D66EB62016F3B800BA3BD8 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08D66EB52016F3B800BA3BD8 /* GLKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,7 @@
 		08B99C741FAFB13200D601E6 /* NonMaxSuppression.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NonMaxSuppression.swift; sourceTree = "<group>"; };
 		08B99C7C1FB164ED00D601E6 /* complex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = complex.swift; sourceTree = "<group>"; };
 		08B99C7E1FB166A800D601E6 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		08D66EB52016F3B800BA3BD8 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08D66EB62016F3B800BA3BD8 /* GLKit.framework in Frameworks */,
 				08B99C7F1FB166AD00D601E6 /* CoreGraphics.framework in Frameworks */,
 				08B99C691FAFA89400D601E6 /* CoreMotion.framework in Frameworks */,
 			);
@@ -165,6 +168,7 @@
 		08B99C671FAFA88D00D601E6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				08D66EB52016F3B800BA3BD8 /* GLKit.framework */,
 				08B99C7E1FB166A800D601E6 /* CoreGraphics.framework */,
 				08B99C681FAFA88D00D601E6 /* CoreMotion.framework */,
 			);
