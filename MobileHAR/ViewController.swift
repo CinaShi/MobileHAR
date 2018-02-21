@@ -53,7 +53,7 @@ class ViewController: UIViewController {
     var lastAcc = [Double]()
     
     //Vars for testing
-    let destinatedLabel = "WALKING"
+    let destinatedLabel = "STANDING"
     
     var sampleCount = 0
     
@@ -179,6 +179,12 @@ class ViewController: UIViewController {
 //                    self.accXData = self.butter_lowpass_filter(data: self.median_filter(data: self.accXData, window_size: 3), cutoff: 20, fs: 50, order: 3)
 //                    self.accYData = self.butter_lowpass_filter(data: self.median_filter(data: self.accYData, window_size: 3), cutoff: 20, fs: 50, order: 3)
 //                    self.accZData = self.butter_lowpass_filter(data: self.median_filter(data: self.accZData, window_size: 3), cutoff: 20, fs: 50, order: 3)
+                    self.gyroXData = self.lowPass(data: self.gyroXData, cutoff: 20, fs: 50)
+                    self.gyroYData = self.lowPass(data: self.gyroYData, cutoff: 20, fs: 50)
+                    self.gyroZData = self.lowPass(data: self.gyroZData, cutoff: 20, fs: 50)
+                    self.accXData = self.lowPass(data: self.accXData, cutoff: 20, fs: 50)
+                    self.accYData = self.lowPass(data: self.accYData, cutoff: 20, fs: 50)
+                    self.accZData = self.lowPass(data: self.accZData, cutoff: 20, fs: 50)
                     
                     //use only median filter
                     self.gyroXData = self.median_filter(data: self.gyroXData, window_size: 3)
@@ -266,6 +272,8 @@ class ViewController: UIViewController {
                     // test tranformation to world coordinate
                     (accData, gyroData) = self.coordinate_transform_world(rotationVector: rotationVector, accData: accData, gyroData: gyroData)
                     
+                    
+                    
                     // test transformation to user-centric coordinate
                     if counter == 0 {
                         self.lastVelocity = [0, 0, 0]
@@ -276,35 +284,45 @@ class ViewController: UIViewController {
                     self.lastVelocity = currentVelocity
                     self.lastAcc = accData
                     
-                    (accData, gyroData) = self.coordinate_transform_user(currentVel: currentVelocity, accData: accData, gyroData: gyroData)
-                    
+//                    (accData, gyroData) = self.coordinate_transform_user(currentVel: currentVelocity, accData: accData, gyroData: gyroData)
+                    //after world - acc
                     // x = -z
+                    // y = -y
+                    // z = -x
+                    
+                    //after world - gyro
+                    // x = -z
+                    // y = -y
+                    // z = -x
+                    
+                    //after u-c
+                    // x = -z
+                    // y = -y
                     // z = x
-                    // y = z
                     
                     //raw data here
-                    self.rawSensorDataArray[0,counter,0] = -gyroData[0]
+                    self.rawSensorDataArray[0,counter,0] = -gyroData[2]
                     self.rawSensorDataArray[0,counter,1] = -gyroData[1]
-                    self.rawSensorDataArray[0,counter,2] = -gyroData[2]
-                    self.rawSensorDataArray[0,counter,3] = -accData[0]
+                    self.rawSensorDataArray[0,counter,2] = -gyroData[0]
+                    self.rawSensorDataArray[0,counter,3] = -accData[2]
                     self.rawSensorDataArray[0,counter,4] = -accData[1]
-                    self.rawSensorDataArray[0,counter,5] = -accData[2]
+                    self.rawSensorDataArray[0,counter,5] = -accData[0]
                     
                     // filter data here
-                    self.gyroXData.append(-gyroData[0])
+                    self.gyroXData.append(-gyroData[2])
                     self.gyroYData.append(-gyroData[1])
-                    self.gyroZData.append(-gyroData[2])
-                    self.accXData.append(-accData[0])
+                    self.gyroZData.append(-gyroData[0])
+                    self.accXData.append(-accData[2])
                     self.accYData.append(-accData[1])
-                    self.accZData.append(-accData[2])
+                    self.accZData.append(-accData[0])
                     
                     // testing
-                    self.allRawGyroXData.append(-gyroData[0])
+                    self.allRawGyroXData.append(-gyroData[2])
                     self.allRawGyroYData.append(-gyroData[1])
-                    self.allRawGyroZData.append(-gyroData[2])
-                    self.allRawAccXData.append(-accData[0])
+                    self.allRawGyroZData.append(-gyroData[0])
+                    self.allRawAccXData.append(-accData[2])
                     self.allRawAccYData.append(-accData[1])
-                    self.allRawAccZData.append(-accData[2])
+                    self.allRawAccZData.append(-accData[0])
                     
 //                    //raw data here
 //                    self.rawSensorDataArray[0,counter,0] = -trueData.rotationRate.y
@@ -376,7 +394,7 @@ class ViewController: UIViewController {
     // coordinate transformation
     
     func coordinate_transform_world(rotationVector: CMQuaternion, accData: [Double], gyroData: [Double]) -> ([Double], [Double]) {
-        let quaternion = GLKQuaternionMake(Float(rotationVector.y), Float(-rotationVector.x), Float(rotationVector.z), Float(rotationVector.w))
+        let quaternion = GLKQuaternionMake(Float(rotationVector.x), Float(rotationVector.y), Float(rotationVector.z), Float(rotationVector.w))
         let conjQuaternion = GLKQuaternionConjugate(quaternion)
         
         let accVector = GLKQuaternionMake(Float(accData[0]), Float(accData[1]), Float(accData[2]), 0)
@@ -491,6 +509,22 @@ class ViewController: UIViewController {
         }
         
         return output
+    }
+    
+    // Below are implementation of simple low pass filter
+    
+    func lowPass(data: [Double], cutoff: Double, fs: Double) -> [Double] {
+        let dt:Double = 1.0 / fs
+        let RC:Double = 1.0 / cutoff
+        let alpha = dt / (dt + RC)
+        
+        var result = [Double]()
+        
+        result.append(data[0])
+        for k in 1...data.count-1 {
+            result.append(data[k] * alpha + data[k-1] * (1-alpha))
+        }
+        return result
     }
     
     
