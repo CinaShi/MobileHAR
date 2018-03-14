@@ -12,8 +12,9 @@ import CoreMotion
 import Darwin
 import Accelerate
 import GLKit
+import Firebase
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
 
     @IBOutlet weak var recogLabel: UILabel!
     @IBOutlet weak var filteredRecogLabel: UILabel!
@@ -31,6 +32,8 @@ class ViewController: UIViewController {
     @IBOutlet var filteredMeans: [UILabel]!
 
     @IBOutlet weak var sampleSize: UILabel!
+    
+    @IBOutlet var uploadDataButton: UIButton!
     
     let model = ConvLSTM()
     var rawSensorDataArray = MultiArray<Double>(shape: [1,128,6])
@@ -51,6 +54,14 @@ class ViewController: UIViewController {
     
     var lastVelocity = [Double]()
     var lastAcc = [Double]()
+    
+    var sensorDataArray = [(Int, Double, Double, Double, Double, Double, Double)]()
+    
+    @IBOutlet var activityPickerView: UIPickerView!
+    
+    let activityPickerViewData = ["WALKING", "WALKING_UPSTAIRS", "WALKING_DOWNSTAIRS", "SITTING", "STANDING", "LAYING"]
+    
+    var uploadActivity: String = ""
     
     //Vars for testing
     let destinatedLabel = "STANDING"
@@ -77,20 +88,27 @@ class ViewController: UIViewController {
     var filteredCorrectPredCount = 0.0
     var filteredAllPredCount = 0.0
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         startBtn.isEnabled = true
         stopBtn.isEnabled = false
+        uploadDataButton.isEnabled = false
+        
+        uploadActivity = activityPickerViewData[0]
+        activityPickerView.delegate = self
+        activityPickerView.dataSource = self
     }
     
     @IBAction func startRecording(_ sender: Any) {
         startBtn.isEnabled = false
         stopBtn.isEnabled = true
-        
+        uploadDataButton.isEnabled = false
         print("motion recording started")
         motion.deviceMotionUpdateInterval = 0.02
         var counter = 0
+        var globalCounter = 0
         motion.startDeviceMotionUpdates(using:.xMagneticNorthZVertical, to: OperationQueue.current!, withHandler: {(data,error) in
             if let trueData = data {
                 if counter == 128 {
@@ -107,44 +125,44 @@ class ViewController: UIViewController {
                     
                     //do position change detection first
                     
-                    if self.lastMeans.count == 0 {
-                        self.lastMeans.append((self.allRawAccXData.reduce(0, +)/Double(self.allRawAccXData.count)))
-                        self.lastMeans.append((self.allRawAccYData.reduce(0, +)/Double(self.allRawAccYData.count)))
-                        self.lastMeans.append((self.allRawAccZData.reduce(0, +)/Double(self.allRawAccZData.count)))
-                        self.lastMeans.append((self.allRawGyroXData.reduce(0, +)/Double(self.allRawGyroXData.count)))
-                        self.lastMeans.append((self.allRawGyroYData.reduce(0, +)/Double(self.allRawGyroYData.count)))
-                        self.lastMeans.append((self.allRawGyroZData.reduce(0, +)/Double(self.allRawGyroZData.count)))
-                    } else {
-                        var currentMeans = [Double]()
-                        currentMeans.append((self.allRawAccXData.reduce(0, +)/Double(self.allRawAccXData.count)))
-                        currentMeans.append((self.allRawAccYData.reduce(0, +)/Double(self.allRawAccYData.count)))
-                        currentMeans.append((self.allRawAccZData.reduce(0, +)/Double(self.allRawAccZData.count)))
-                        currentMeans.append((self.allRawGyroXData.reduce(0, +)/Double(self.allRawGyroXData.count)))
-                        currentMeans.append((self.allRawGyroYData.reduce(0, +)/Double(self.allRawGyroYData.count)))
-                        currentMeans.append((self.allRawGyroZData.reduce(0, +)/Double(self.allRawGyroZData.count)))
-                        
-                        var positionChanged = false
-                        let changeFactor = 25.0
-                        
-                        for i in 0...5 {
-                            let meanDiff = abs(self.lastMeans[i] - currentMeans[i])
-                            if meanDiff > abs(self.lastMeans[i]) * changeFactor || meanDiff > abs(currentMeans[i]) * changeFactor {
-                                positionChanged = true
-                            }
-                        }
-                        
-                        if positionChanged {
-                            self.existedArray.removeAll()
-                            self.positionChangeCount += 1
-                        }
-                        
-                        self.lastMeans = currentMeans
-                    }
+//                    if self.lastMeans.count == 0 {
+//                        self.lastMeans.append((self.allRawAccXData.reduce(0, +)/Double(self.allRawAccXData.count)))
+//                        self.lastMeans.append((self.allRawAccYData.reduce(0, +)/Double(self.allRawAccYData.count)))
+//                        self.lastMeans.append((self.allRawAccZData.reduce(0, +)/Double(self.allRawAccZData.count)))
+//                        self.lastMeans.append((self.allRawGyroXData.reduce(0, +)/Double(self.allRawGyroXData.count)))
+//                        self.lastMeans.append((self.allRawGyroYData.reduce(0, +)/Double(self.allRawGyroYData.count)))
+//                        self.lastMeans.append((self.allRawGyroZData.reduce(0, +)/Double(self.allRawGyroZData.count)))
+//                    } else {
+//                        var currentMeans = [Double]()
+//                        currentMeans.append((self.allRawAccXData.reduce(0, +)/Double(self.allRawAccXData.count)))
+//                        currentMeans.append((self.allRawAccYData.reduce(0, +)/Double(self.allRawAccYData.count)))
+//                        currentMeans.append((self.allRawAccZData.reduce(0, +)/Double(self.allRawAccZData.count)))
+//                        currentMeans.append((self.allRawGyroXData.reduce(0, +)/Double(self.allRawGyroXData.count)))
+//                        currentMeans.append((self.allRawGyroYData.reduce(0, +)/Double(self.allRawGyroYData.count)))
+//                        currentMeans.append((self.allRawGyroZData.reduce(0, +)/Double(self.allRawGyroZData.count)))
+//
+//                        var positionChanged = false
+//                        let changeFactor = 25.0
+//
+//                        for i in 0...5 {
+//                            let meanDiff = abs(self.lastMeans[i] - currentMeans[i])
+//                            if meanDiff > abs(self.lastMeans[i]) * changeFactor || meanDiff > abs(currentMeans[i]) * changeFactor {
+//                                positionChanged = true
+//                            }
+//                        }
+//
+//                        if positionChanged {
+//                            self.existedArray.removeAll()
+//                            self.positionChangeCount += 1
+//                        }
+//
+//                        self.lastMeans = currentMeans
+//                    }
                     
                     
                     // use new algo to improve prediction
                     self.existedArray.append((output?.classLabel)!)
-                    var outputLabel = output?.classLabel
+                    let outputLabel = output?.classLabel
                     
 //                    let unique = Array(Set(self.existedArray))
 //                    for label in unique {
@@ -202,6 +220,9 @@ class ViewController: UIViewController {
                         self.filteredSensorDataArray[0,i,4] = self.accYData[i]
                         self.filteredSensorDataArray[0,i,5] = self.accZData[i]
                         
+                        self.sensorDataArray.append((globalCounter, self.gyroXData[i], self.gyroYData[i], self.gyroZData[i], self.accXData[i], self.accYData[i], self.accZData[i]))
+                        globalCounter += 1
+                        
                         //testing
                         self.allFilteredGyroXData.append(self.gyroXData[i])
                         self.allFilteredGyroYData.append(self.gyroYData[i])
@@ -214,6 +235,8 @@ class ViewController: UIViewController {
                     let filteredInput = ConvLSTMInput(input: self.filteredSensorDataArray.array)
                     
                     let filteredOutput = try? self.model.prediction(input: filteredInput)
+                    
+                    self.existedArray.append((filteredOutput?.classLabel)!)
                     
 //                    print(filteredInput.input.shape)
 //
@@ -386,9 +409,84 @@ class ViewController: UIViewController {
     @IBAction func stopRecording(_ sender: Any) {
         startBtn.isEnabled = true
         stopBtn.isEnabled = false
-        
+        uploadDataButton.isEnabled = true
         motion.stopDeviceMotionUpdates()
         print("motion recording stopped")
+    }
+    
+    @IBAction func uploadData(_ sender: Any) {
+//        let countedSet = NSCountedSet(array: existedArray)
+//        let mostFrequent = countedSet.max { countedSet.count(for: $0) < countedSet.count(for: $1) } as! String
+//        uploadActivity = mostFrequent
+        let storageRef = Storage.storage().reference()
+        let fileRef = storageRef.child("data/\(NSUUID().uuidString)-\(uploadActivity).csv")
+        
+        let uploadString = createUploadString()
+        let uploadFilePath = NSTemporaryDirectory() + "\(uploadActivity).csv"
+        let uploadFileURL = NSURL(fileURLWithPath: uploadFilePath)
+        FileManager.default.createFile(atPath: uploadFilePath, contents: NSData() as Data, attributes: nil)
+        
+        var fileHandle: FileHandle? = nil
+        do {
+            fileHandle = try FileHandle(forWritingTo: uploadFileURL as URL)
+        } catch {
+            print("Error with fileHandle")
+        }
+        
+        if fileHandle != nil {
+            fileHandle!.seekToEndOfFile()
+            let csvData = uploadString.data(using: String.Encoding.utf8, allowLossyConversion: false)
+            fileHandle!.write(csvData!)
+            
+            fileHandle!.closeFile()
+        }
+        
+        let uploadTask = fileRef.putFile(from: uploadFileURL as URL, metadata: nil) { metadata, error in
+            if let error = error {
+                print("error occurs, \n\(error)")
+            } else {
+                let downLoadURL = metadata!.downloadURL()
+                print("download URL: \(String(describing: downLoadURL))")
+            }
+        }
+        
+        uploadTask.observe(.success) { snapchat in
+            print("\(snapchat.status)")
+        }
+    }
+    
+    func createUploadString() -> String {
+        
+        var export: String = NSLocalizedString("timestamp, gyroX, gyroY, gyroZ, tAccX, tAccY, tAccZ \n", comment: "")
+        for (index, sensorData) in sensorDataArray.enumerated() {
+            if index <= sensorDataArray.count - 1 {
+                export += "\(sensorData.0),\(sensorData.1),\(sensorData.2),\(sensorData.3),\(sensorData.4),\(sensorData.5),\(sensorData.6) \n"
+            }
+        }
+        print("This is what the app will export: \(export)")
+        return export
+    }
+    
+    @IBAction func downloadModel(_ sender: Any) {
+        
+    }
+    
+    //pickerview delegate
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int{
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int{
+        return activityPickerViewData.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return activityPickerViewData[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int){
+        uploadActivity = activityPickerViewData[row]
     }
     
     // coordinate transformation

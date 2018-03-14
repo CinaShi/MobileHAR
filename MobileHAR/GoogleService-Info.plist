@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>ca-app-pub-3940256099942544/4411468910</string>
+	<key>CLIENT_ID</key>
+	<string>89107582096-c6qesun4tbuk3s53afv5fp3br4m3h78i.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.89107582096-c6qesun4tbuk3s53afv5fp3br4m3h78i</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBgWrqi_mcuYLkHOd2EOkRbOpfO8ujmg_s</string>
+	<key>GCM_SENDER_ID</key>
+	<string>89107582096</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>Ubicomp.MobileHAR</string>
+	<key>PROJECT_ID</key>
+	<string>mobilehar-aa637</string>
+	<key>STORAGE_BUCKET</key>
+	<string>mobilehar-aa637.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<true></true>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<false></false>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:89107582096:ios:10bc927ae8b7278b</string>
+	<key>DATABASE_URL</key>
+	<string>https://mobilehar-aa637.firebaseio.com</string>
+</dict>
+</plist>

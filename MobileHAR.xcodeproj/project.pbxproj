@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		032556E803AE13922C9169D1 /* Pods_MobileHARTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C1827DC735285845B5E6AEE /* Pods_MobileHARTests.framework */; };
 		08B99C381FAFA7F800D601E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B99C371FAFA7F800D601E6 /* AppDelegate.swift */; };
 		08B99C3A1FAFA7F800D601E6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B99C391FAFA7F800D601E6 /* ViewController.swift */; };
 		08B99C3D1FAFA7F800D601E6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08B99C3B1FAFA7F800D601E6 /* Main.storyboard */; };
@@ -27,6 +28,9 @@
 		08B99C7D1FB164ED00D601E6 /* complex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B99C7C1FB164ED00D601E6 /* complex.swift */; };
 		08B99C7F1FB166AD00D601E6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08B99C7E1FB166A800D601E6 /* CoreGraphics.framework */; };
 		08D66EB62016F3B800BA3BD8 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08D66EB52016F3B800BA3BD8 /* GLKit.framework */; };
+		08D7AD4020595E6D00EDC186 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 08D7AD3F20595E6D00EDC186 /* GoogleService-Info.plist */; };
+		0B339966C755C28022C96A00 /* Pods_MobileHAR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60C4BBF4249E8B3EDFC24E27 /* Pods_MobileHAR.framework */; };
+		59869ADD7C56FCC3E117CA9A /* Pods_MobileHARUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F4EA797EC00735BAD44E5B3 /* Pods_MobileHARUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +51,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		034BC21665914E01C25F6632 /* Pods-MobileHARTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileHARTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MobileHARTests/Pods-MobileHARTests.debug.xcconfig"; sourceTree = "<group>"; };
 		08B99C341FAFA7F800D601E6 /* MobileHAR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MobileHAR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		08B99C371FAFA7F800D601E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		08B99C391FAFA7F800D601E6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -73,6 +78,15 @@
 		08B99C7C1FB164ED00D601E6 /* complex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = complex.swift; sourceTree = "<group>"; };
 		08B99C7E1FB166A800D601E6 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		08D66EB52016F3B800BA3BD8 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		08D7AD3F20595E6D00EDC186 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		1127FE934E0F054AE09543E4 /* Pods-MobileHARUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileHARUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MobileHARUITests/Pods-MobileHARUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		3F4EA797EC00735BAD44E5B3 /* Pods_MobileHARUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MobileHARUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		60C4BBF4249E8B3EDFC24E27 /* Pods_MobileHAR.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MobileHAR.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7104F71107AB84CB856A4707 /* Pods-MobileHAR.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileHAR.release.xcconfig"; path = "Pods/Target Support Files/Pods-MobileHAR/Pods-MobileHAR.release.xcconfig"; sourceTree = "<group>"; };
+		8C1827DC735285845B5E6AEE /* Pods_MobileHARTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MobileHARTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B2F36E72F0C76376D19C570C /* Pods-MobileHARUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileHARUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MobileHARUITests/Pods-MobileHARUITests.release.xcconfig"; sourceTree = "<group>"; };
+		B5E79C36226CEC26A2749144 /* Pods-MobileHAR.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileHAR.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MobileHAR/Pods-MobileHAR.debug.xcconfig"; sourceTree = "<group>"; };
+		FC5B6413D49B6344AC1A150B /* Pods-MobileHARTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileHARTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MobileHARTests/Pods-MobileHARTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +97,7 @@
 				08D66EB62016F3B800BA3BD8 /* GLKit.framework in Frameworks */,
 				08B99C7F1FB166AD00D601E6 /* CoreGraphics.framework in Frameworks */,
 				08B99C691FAFA89400D601E6 /* CoreMotion.framework in Frameworks */,
+				0B339966C755C28022C96A00 /* Pods_MobileHAR.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -90,6 +105,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				032556E803AE13922C9169D1 /* Pods_MobileHARTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -97,6 +113,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				59869ADD7C56FCC3E117CA9A /* Pods_MobileHARUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,6 +128,7 @@
 				08B99C561FAFA7F800D601E6 /* MobileHARUITests */,
 				08B99C351FAFA7F800D601E6 /* Products */,
 				08B99C671FAFA88D00D601E6 /* Frameworks */,
+				4D966DA2E08556511ED21291 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -140,6 +158,7 @@
 				08B99C391FAFA7F800D601E6 /* ViewController.swift */,
 				08B99C6C1FAFAE5700D601E6 /* MultiArray.swift */,
 				08B99C3B1FAFA7F800D601E6 /* Main.storyboard */,
+				08D7AD3F20595E6D00EDC186 /* GoogleService-Info.plist */,
 				08B99C3E1FAFA7F800D601E6 /* Assets.xcassets */,
 				08B99C401FAFA7F800D601E6 /* LaunchScreen.storyboard */,
 				08B99C431FAFA7F800D601E6 /* Info.plist */,
@@ -171,8 +190,24 @@
 				08D66EB52016F3B800BA3BD8 /* GLKit.framework */,
 				08B99C7E1FB166A800D601E6 /* CoreGraphics.framework */,
 				08B99C681FAFA88D00D601E6 /* CoreMotion.framework */,
+				60C4BBF4249E8B3EDFC24E27 /* Pods_MobileHAR.framework */,
+				8C1827DC735285845B5E6AEE /* Pods_MobileHARTests.framework */,
+				3F4EA797EC00735BAD44E5B3 /* Pods_MobileHARUITests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4D966DA2E08556511ED21291 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				B5E79C36226CEC26A2749144 /* Pods-MobileHAR.debug.xcconfig */,
+				7104F71107AB84CB856A4707 /* Pods-MobileHAR.release.xcconfig */,
+				034BC21665914E01C25F6632 /* Pods-MobileHARTests.debug.xcconfig */,
+				FC5B6413D49B6344AC1A150B /* Pods-MobileHARTests.release.xcconfig */,
+				1127FE934E0F054AE09543E4 /* Pods-MobileHARUITests.debug.xcconfig */,
+				B2F36E72F0C76376D19C570C /* Pods-MobileHARUITests.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -182,9 +217,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 08B99C5C1FAFA7F800D601E6 /* Build configuration list for PBXNativeTarget "MobileHAR" */;
 			buildPhases = (
+				75F2E2FECFCA6CBCD2E2C40E /* [CP] Check Pods Manifest.lock */,
 				08B99C301FAFA7F800D601E6 /* Sources */,
 				08B99C311FAFA7F800D601E6 /* Frameworks */,
 				08B99C321FAFA7F800D601E6 /* Resources */,
+				5A3395E42F361BDCE9B82EF0 /* [CP] Embed Pods Frameworks */,
+				51EAAE88AC886F587040B674 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -199,9 +237,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 08B99C5F1FAFA7F800D601E6 /* Build configuration list for PBXNativeTarget "MobileHARTests" */;
 			buildPhases = (
+				9ED331C32EF6E39E4849C383 /* [CP] Check Pods Manifest.lock */,
 				08B99C441FAFA7F800D601E6 /* Sources */,
 				08B99C451FAFA7F800D601E6 /* Frameworks */,
 				08B99C461FAFA7F800D601E6 /* Resources */,
+				2AF3931C9EA23FFAD5C75A6C /* [CP] Embed Pods Frameworks */,
+				B6E4F245C456DEBB7390C364 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -217,9 +258,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 08B99C621FAFA7F800D601E6 /* Build configuration list for PBXNativeTarget "MobileHARUITests" */;
 			buildPhases = (
+				020B96A1D011105EC81A2461 /* [CP] Check Pods Manifest.lock */,
 				08B99C4F1FAFA7F800D601E6 /* Sources */,
 				08B99C501FAFA7F800D601E6 /* Frameworks */,
 				08B99C511FAFA7F800D601E6 /* Resources */,
+				A7812DE1C1D7D0509073B592 /* [CP] Embed Pods Frameworks */,
+				3DCB63D746BCDBF79843869C /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -285,6 +329,7 @@
 				08B99C421FAFA7F800D601E6 /* LaunchScreen.storyboard in Resources */,
 				08B99C3F1FAFA7F800D601E6 /* Assets.xcassets in Resources */,
 				08B99C3D1FAFA7F800D601E6 /* Main.storyboard in Resources */,
+				08D7AD4020595E6D00EDC186 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,6 +348,160 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		020B96A1D011105EC81A2461 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MobileHARUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		2AF3931C9EA23FFAD5C75A6C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MobileHARTests/Pods-MobileHARTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		3DCB63D746BCDBF79843869C /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MobileHARUITests/Pods-MobileHARUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		51EAAE88AC886F587040B674 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MobileHAR/Pods-MobileHAR-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5A3395E42F361BDCE9B82EF0 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-MobileHAR/Pods-MobileHAR-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MobileHAR/Pods-MobileHAR-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		75F2E2FECFCA6CBCD2E2C40E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MobileHAR-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9ED331C32EF6E39E4849C383 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MobileHARTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A7812DE1C1D7D0509073B592 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MobileHARUITests/Pods-MobileHARUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B6E4F245C456DEBB7390C364 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MobileHARTests/Pods-MobileHARTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		08B99C301FAFA7F800D601E6 /* Sources */ = {
@@ -484,6 +683,7 @@
 		};
 		08B99C5D1FAFA7F800D601E6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B5E79C36226CEC26A2749144 /* Pods-MobileHAR.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -500,6 +700,7 @@
 		};
 		08B99C5E1FAFA7F800D601E6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7104F71107AB84CB856A4707 /* Pods-MobileHAR.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -516,6 +717,7 @@
 		};
 		08B99C601FAFA7F800D601E6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 034BC21665914E01C25F6632 /* Pods-MobileHARTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -533,6 +735,7 @@
 		};
 		08B99C611FAFA7F800D601E6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FC5B6413D49B6344AC1A150B /* Pods-MobileHARTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -550,6 +753,7 @@
 		};
 		08B99C631FAFA7F800D601E6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1127FE934E0F054AE09543E4 /* Pods-MobileHARUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -566,6 +770,7 @@
 		};
 		08B99C641FAFA7F800D601E6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B2F36E72F0C76376D19C570C /* Pods-MobileHARUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
