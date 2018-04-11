@@ -15,7 +15,6 @@
 		08B99C421FAFA7F800D601E6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08B99C401FAFA7F800D601E6 /* LaunchScreen.storyboard */; };
 		08B99C4D1FAFA7F800D601E6 /* MobileHARTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B99C4C1FAFA7F800D601E6 /* MobileHARTests.swift */; };
 		08B99C581FAFA7F800D601E6 /* MobileHARUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B99C571FAFA7F800D601E6 /* MobileHARUITests.swift */; };
-		08B99C661FAFA81100D601E6 /* ConvLSTM.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 08B99C651FAFA81100D601E6 /* ConvLSTM.mlmodel */; };
 		08B99C691FAFA89400D601E6 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08B99C681FAFA88D00D601E6 /* CoreMotion.framework */; };
 		08B99C6D1FAFAE5800D601E6 /* MultiArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B99C6C1FAFAE5700D601E6 /* MultiArray.swift */; };
 		08B99C751FAFB13300D601E6 /* MLMultiArray+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B99C6E1FAFB13200D601E6 /* MLMultiArray+Image.swift */; };
@@ -29,6 +28,8 @@
 		08B99C7F1FB166AD00D601E6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08B99C7E1FB166A800D601E6 /* CoreGraphics.framework */; };
 		08D66EB62016F3B800BA3BD8 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08D66EB52016F3B800BA3BD8 /* GLKit.framework */; };
 		08D7AD4020595E6D00EDC186 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 08D7AD3F20595E6D00EDC186 /* GoogleService-Info.plist */; };
+		08D7AD4220597A9500EDC186 /* ConvLSTM.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 08B99C651FAFA81100D601E6 /* ConvLSTM.mlmodel */; };
+		08D7AD44207DDD4800EDC186 /* HARToolkit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D7AD43207DDD4800EDC186 /* HARToolkit.swift */; };
 		0B339966C755C28022C96A00 /* Pods_MobileHAR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60C4BBF4249E8B3EDFC24E27 /* Pods_MobileHAR.framework */; };
 		59869ADD7C56FCC3E117CA9A /* Pods_MobileHARUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F4EA797EC00735BAD44E5B3 /* Pods_MobileHARUITests.framework */; };
 /* End PBXBuildFile section */
@@ -79,6 +80,7 @@
 		08B99C7E1FB166A800D601E6 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		08D66EB52016F3B800BA3BD8 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		08D7AD3F20595E6D00EDC186 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		08D7AD43207DDD4800EDC186 /* HARToolkit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HARToolkit.swift; sourceTree = "<group>"; };
 		1127FE934E0F054AE09543E4 /* Pods-MobileHARUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileHARUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MobileHARUITests/Pods-MobileHARUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		3F4EA797EC00735BAD44E5B3 /* Pods_MobileHARUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MobileHARUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60C4BBF4249E8B3EDFC24E27 /* Pods_MobileHAR.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MobileHAR.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -154,6 +156,7 @@
 				08B99C731FAFB13200D601E6 /* Predictions.swift */,
 				08B99C721FAFB13200D601E6 /* UIImage+CVPixelBuffer.swift */,
 				08B99C651FAFA81100D601E6 /* ConvLSTM.mlmodel */,
+				08D7AD43207DDD4800EDC186 /* HARToolkit.swift */,
 				08B99C371FAFA7F800D601E6 /* AppDelegate.swift */,
 				08B99C391FAFA7F800D601E6 /* ViewController.swift */,
 				08B99C6C1FAFAE5700D601E6 /* MultiArray.swift */,
@@ -508,6 +511,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08D7AD4220597A9500EDC186 /* ConvLSTM.mlmodel in Sources */,
 				08B99C7D1FB164ED00D601E6 /* complex.swift in Sources */,
 				08B99C7A1FAFB13300D601E6 /* Predictions.swift in Sources */,
 				08B99C751FAFB13300D601E6 /* MLMultiArray+Image.swift in Sources */,
@@ -516,8 +520,8 @@
 				08B99C7B1FAFB13300D601E6 /* NonMaxSuppression.swift in Sources */,
 				08B99C6D1FAFAE5800D601E6 /* MultiArray.swift in Sources */,
 				08B99C761FAFB13300D601E6 /* CVPixelBuffer+Helpers.swift in Sources */,
-				08B99C661FAFA81100D601E6 /* ConvLSTM.mlmodel in Sources */,
 				08B99C381FAFA7F800D601E6 /* AppDelegate.swift in Sources */,
+				08D7AD44207DDD4800EDC186 /* HARToolkit.swift in Sources */,
 				08B99C791FAFB13300D601E6 /* UIImage+CVPixelBuffer.swift in Sources */,
 				08B99C781FAFB13300D601E6 /* Math.swift in Sources */,
 			);

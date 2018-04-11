@@ -865,14 +865,4 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     }
 }
 
-extension Array where Element == Double {
-    func median() -> Double {
-        let sortedArray = sorted()
-        if count % 2 != 0 {
-            return sortedArray[count / 2]
-        } else {
-            return (sortedArray[count / 2] + sortedArray[count / 2 - 1]) / 2.0
-        }
-    }
-}
 
